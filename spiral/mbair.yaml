@@ -1,0 +1,39 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: mbair
+  namespace: argocd
+spec:
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  orphanedResources:
+    warn: false
+    ignore:
+    - group: cilium.io
+      kind: CiliumIdentity
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: spiral--mbair
+  namespace: argocd
+spec:
+  project: mbair
+  source:
+    repoURL: 'https://github.com/amanibhavam/spiral'
+    path: mbair
+    targetRevision: 0.0.1
+  destination:
+    name: in-cluster
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
