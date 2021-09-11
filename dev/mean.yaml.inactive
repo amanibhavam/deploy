@@ -29,7 +29,7 @@ spec:
   source:
     repoURL: 'https://github.com/amanibhavam/dev'
     path: mean
-    targetRevision: 0.0.2
+    targetRevision: master
   destination:
     name: in-cluster
     namespace: argocd

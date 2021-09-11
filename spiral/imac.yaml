@@ -29,7 +29,7 @@ spec:
   source:
     repoURL: 'https://github.com/amanibhavam/spiral'
     path: imac
-    targetRevision: 0.0.1
+    targetRevision: master
   destination:
     name: in-cluster
     namespace: argocd
