@@ -22,7 +22,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: spiral--imac
+  name: aa-spiral--imac
   namespace: argocd
 spec:
   project: imac

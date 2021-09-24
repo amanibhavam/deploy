@@ -22,7 +22,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: spiral--mini
+  name: aa-spiral--mini
   namespace: argocd
 spec:
   project: mini

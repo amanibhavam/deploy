@@ -22,7 +22,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: spiral--mbpro
+  name: aa-spiral--mbpro
   namespace: argocd
 spec:
   project: mbpro
