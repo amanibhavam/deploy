@@ -27,8 +27,8 @@ metadata:
 spec:
   project: mini
   source:
-    repoURL: 'https://github.com/amanibhavam/spiral'
-    path: mini
+    repoURL: 'https://github.com/amanibhavam/spiral-mini'
+    path: deploy
     targetRevision: master
   destination:
     name: in-cluster
