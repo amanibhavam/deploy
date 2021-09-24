@@ -27,8 +27,8 @@ metadata:
 spec:
   project: kind
   source:
-    repoURL: 'https://github.com/amanibhavam/dev'
-    path: kind
+    repoURL: 'https://github.com/amanibhavam/dev-kind'
+    path: deploy
     targetRevision: master
   destination:
     name: in-cluster

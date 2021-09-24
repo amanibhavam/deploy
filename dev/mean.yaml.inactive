@@ -27,8 +27,8 @@ metadata:
 spec:
   project: mean
   source:
-    repoURL: 'https://github.com/amanibhavam/dev'
-    path: mean
+    repoURL: 'https://github.com/amanibhavam/dev-mean'
+    path: deploy
     targetRevision: master
   destination:
     name: in-cluster
