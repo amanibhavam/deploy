@@ -1,0 +1,39 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  name: katt
+  namespace: argocd
+spec:
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  orphanedResources:
+    warn: false
+    ignore:
+    - group: cilium.io
+      kind: CiliumIdentity
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: aa-spiral--katt
+  namespace: argocd
+spec:
+  project: katt
+  source:
+    repoURL: 'https://github.com/amanibhavam/spiral-katt'
+    path: deploy
+    targetRevision: master
+  destination:
+    name: in-cluster
+    namespace: argocd
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
