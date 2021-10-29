@@ -1,0 +1,31 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-forward-auth
+  namespace: argo
+spec:
+  forwardAuth:
+    address: http://traefik-forward-auth.traefik.svc.cluster.local:4181
+    authResponseHeaders:
+      - X-Forwarded-User
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argowf
+  namespace: argo
+spec:
+  tls:
+    certResolver: letsencrypt 
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`argo.defn.ooo`)
+    kind: Rule
+    services:
+    - name: argo-server
+      port: 2746
+      scheme: https
+    middlewares:
+      - name: traefik-forward-auth
