@@ -1,0 +1,8 @@
+- op: add
+  path: /spec/ports/-
+  value:
+    name: cloudflared
+    port: 8081
+    protocol: TCP
+    targetPort: cloudflared
+    nodePort: 30081

@@ -1,0 +1,11 @@
+- op: add
+  path: /spec/template/spec/volumes/-
+  value:
+    name: acme
+    hostPath:
+      path: /data/acme
+- op: replace
+  path: /spec/template/spec/containers/0/volumeMounts/0
+  value:
+    name: acme
+    mountPath: /data/acme

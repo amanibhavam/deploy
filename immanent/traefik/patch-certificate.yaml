@@ -1,0 +1,9 @@
+- op: replace
+  path: /spec/dnsNames/0
+  value: '*.defn.ooo'
+- op: replace
+  path: /spec/dnsNames/1
+  value: '*.i004.defn.ooo'
+- op: replace
+  path: /spec/issuerRef/name
+  value: letsencrypt-prod

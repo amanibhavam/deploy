@@ -1,0 +1,14 @@
+- op: add
+  path: /spec/template/spec/initContainers
+  value:
+  - name: permissions-acme
+    image: alpine:latest
+    volumeMounts:
+      - name: acme
+        mountPath: /data/acme
+    command:
+      - chown
+      - -R
+      - 65532:65532
+      - /data/acme
+

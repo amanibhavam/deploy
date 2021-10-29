@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immanent--traefik-forward-auth
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: 'https://github.com/letfn/katt-traefik-forward-auth'
+    path: google
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
