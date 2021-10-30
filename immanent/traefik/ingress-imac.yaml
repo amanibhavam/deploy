@@ -1,4 +1,15 @@
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-imac
+spec:
+  type: ExternalName
+  externalName: traefik.traefik-imac.svc.80.mesh
+  ports:
+    - port: 80
+      targetPort: 80
+---
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
@@ -17,13 +28,20 @@ spec:
     middlewares:
       - name: traefik-forward-auth
 ---
-apiVersion: v1
-kind: Service
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
 metadata:
-  name: traefik-imac
+  name: pihole-imac
 spec:
-  type: ExternalName
-  externalName: traefik.traefik-imac.svc.80.mesh
-  ports:
-    - port: 80
-      targetPort: 80
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`pihole.imac.defn.ooo`)
+    kind: Rule
+    services:
+    - name: traefik-imac
+      port: 80
+    middlewares:
+      - name: traefik-forward-auth
