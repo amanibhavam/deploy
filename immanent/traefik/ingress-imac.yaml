@@ -23,7 +23,7 @@ metadata:
   name: traefik-imac
 spec:
   type: ExternalName
-  externalName: traefik_traefik-imac_svc_80.mesh
+  externalName: traefik.traefik-imac.svc.80.mesh
   ports:
     - port: 80
       targetPort: 80
