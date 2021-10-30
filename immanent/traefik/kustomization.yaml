@@ -4,6 +4,7 @@ kind: Kustomization
 resources:
   - https://github.com/letfn/katt-traefik/base?ref=0.0.26
   - ingress.yaml
+  - ingress-imac.yaml
 
 patches:
   - path: patch-nodeport-http.yaml

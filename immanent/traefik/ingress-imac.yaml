@@ -1,0 +1,29 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-imac
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`traefik.imac.defn.ooo`)
+    kind: Rule
+    services:
+    - name: traefik-imac
+      port: 80
+    middlewares:
+      - name: traefik-forward-auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-imac
+spec:
+  type: ExternalName
+  externalName: traefik_traefik-imac_svc_80.mesh
+  ports:
+    - port: 80
+      targetPort: 80
