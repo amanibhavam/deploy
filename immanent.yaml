@@ -22,7 +22,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: aa-dev--immanent
+  name: dev--immanent
   namespace: argocd
 spec:
   project: immanent
