@@ -1,0 +1,9 @@
+- op: replace
+  path: /data/cluster-id
+  value: "101"
+- op: replace
+  path: /data/cluster-name
+  value: "mini"
+- op: replace
+  path: /data/cluster-pool-ipv4-cidr
+  value: "10.81.0.0/16"

@@ -1,0 +1,9 @@
+- op: replace
+  path: /data/cluster-id
+  value: "102"
+- op: replace
+  path: /data/cluster-name
+  value: "imac"
+- op: replace
+  path: /data/cluster-pool-ipv4-cidr
+  value: "10.82.0.0/16"

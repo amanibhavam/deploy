@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--pihole
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: 'https://github.com/amanibhavam/deploy'
+    path: mbpro/pihole
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true

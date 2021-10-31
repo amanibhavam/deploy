@@ -1,0 +1,20 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mini--kuma-global
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: 'https://github.com/amanibhavam/deploy'
+    path: mini/kuma-global
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
