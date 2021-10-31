@@ -8,14 +8,14 @@ let groups = {
 }
 
 for c in clusterNames {
-	appProject: "\(c)": {}
+	cluster: "\(c)": {}
 }
 
 for gname, g in groups for c in g {
 	group: "\(gname)": "\(c)": {}
 }
 
-appProject: [CLUSTER=string]: {
+cluster: [CLUSTER=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "AppProject"
 	metadata: {
