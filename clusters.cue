@@ -45,26 +45,26 @@ appProject: [NAME=string]: {
 }
 
 group: [GROUP=string]: [NAME=string]: {
-  apiVersion: "argoproj.io/v1alpha1"
-  kind:       "Application"
-  metadata: {
-    name:      "\(GROUP)--\(NAME)"
-    namespace: "argocd"
-  }
-  spec: {
-    project: NAME
-    source: {
-      repoURL:        "https://github.com/amanibhavam/deploy"
-      path:           "\(NAME)/deploy"
-      targetRevision: "master"
-    }
-    destination: {
-      name:      "in-cluster"
-      namespace: "argocd"
-    }
-    syncPolicy: automated: {
-      prune:    true
-      selfHeal: true
-    }
-  }
+	apiVersion: "argoproj.io/v1alpha1"
+	kind:       "Application"
+	metadata: {
+		name:      "\(GROUP)--\(NAME)"
+		namespace: "argocd"
+	}
+	spec: {
+		project: NAME
+		source: {
+			repoURL:        "https://github.com/amanibhavam/deploy"
+			path:           "\(NAME)/deploy"
+			targetRevision: "master"
+		}
+		destination: {
+			name:      "in-cluster"
+			namespace: "argocd"
+		}
+		syncPolicy: automated: {
+			prune:    true
+			selfHeal: true
+		}
+	}
 }
