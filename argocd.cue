@@ -15,11 +15,11 @@ for gname, g in groups for c in g {
 	group: "\(gname)": "\(c)": {}
 }
 
-appProject: [NAME=string]: {
+appProject: [CLUSTER=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "AppProject"
 	metadata: {
-		name:      NAME
+		name:      CLUSTER
 		namespace: "argocd"
 	}
 	spec: {
@@ -44,18 +44,18 @@ appProject: [NAME=string]: {
 	}
 }
 
-group: [GROUP=string]: [NAME=string]: {
+group: [GROUP=string]: [CLUSTER=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "Application"
 	metadata: {
-		name:      "\(GROUP)--\(NAME)"
+		name:      "\(GROUP)--\(CLUSTER)"
 		namespace: "argocd"
 	}
 	spec: {
-		project: NAME
+		project: CLUSTER
 		source: {
 			repoURL:        "https://github.com/amanibhavam/deploy"
-			path:           "\(NAME)/deploy"
+			path:           "\(CLUSTER)/deploy"
 			targetRevision: "master"
 		}
 		destination: {
