@@ -8,9 +8,13 @@ let groups = {
 }
 
 for c in clusterNames {
-	cluster: "\(c)": {}
+	project: #ArgoProject & {
+		"\(c)": {}
+	}
 }
 
 for gname, g in groups for c in g {
-	group: "\(gname)": "\(c)": {}
+	group: #ArgoCluster & {
+		"\(gname)": "\(c)": {}
+	}
 }

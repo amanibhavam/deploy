@@ -1,6 +1,6 @@
 package katt
 
-cluster: [CLUSTER=string]: {
+#ArgoProject: [CLUSTER=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "AppProject"
 	metadata: {
@@ -29,7 +29,7 @@ cluster: [CLUSTER=string]: {
 	}
 }
 
-group: [GROUP=string]: [CLUSTER=string]: {
+#ArgoCluster: [GROUP=string]: [CLUSTER=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "Application"
 	metadata: {
