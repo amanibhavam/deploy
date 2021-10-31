@@ -5,11 +5,11 @@ let groups = {
 	dev: [ "immanent"]
 }
 
-for gname, g in groups for c in g {
+for gname, clusters in groups for cname in clusters {
 	project: #ArgoProject & {
-		"\(c)": {}
+		"\(cname)": {}
 	}
 	group: #ArgoGroupCluster & {
-		"\(gname)": "\(c)": {}
+		"\(gname)": "\(cname)": {}
 	}
 }
