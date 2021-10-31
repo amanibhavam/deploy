@@ -1,18 +1,18 @@
 package katt
 
-let clusters = [ "mini", "imac", "mbpro", "immanent"]
+let clusterNames = [ "mini", "imac", "mbpro", "immanent"]
 
 let groups = {
 	spiral: [ "mini", "imac", "mbpro"]
 	dev: [ "immanent"]
 }
 
-for c in clusters {
+for c in clusterNames {
 	appProject: "\(c)": {}
 }
 
 for gname, g in groups for c in g {
-	group: "\(gname)": application: "\(c)": {}
+	group: "\(gname)": "\(c)": {}
 }
 
 appProject: [NAME=string]: {
@@ -44,27 +44,27 @@ appProject: [NAME=string]: {
 	}
 }
 
-group: [GROUP=string]: application: [NAME=string]: {
-	apiVersion: "argoproj.io/v1alpha1"
-	kind:       "Application"
-	metadata: {
-		name:      "\(GROUP)--\(NAME)"
-		namespace: "argocd"
-	}
-	spec: {
-		project: NAME
-		source: {
-			repoURL:        "https://github.com/amanibhavam/deploy"
-			path:           "\(NAME)/deploy"
-			targetRevision: "master"
-		}
-		destination: {
-			name:      "in-cluster"
-			namespace: "argocd"
-		}
-		syncPolicy: automated: {
-			prune:    true
-			selfHeal: true
-		}
-	}
+group: [GROUP=string]: [NAME=string]: {
+  apiVersion: "argoproj.io/v1alpha1"
+  kind:       "Application"
+  metadata: {
+    name:      "\(GROUP)--\(NAME)"
+    namespace: "argocd"
+  }
+  spec: {
+    project: NAME
+    source: {
+      repoURL:        "https://github.com/amanibhavam/deploy"
+      path:           "\(NAME)/deploy"
+      targetRevision: "master"
+    }
+    destination: {
+      name:      "in-cluster"
+      namespace: "argocd"
+    }
+    syncPolicy: automated: {
+      prune:    true
+      selfHeal: true
+    }
+  }
 }

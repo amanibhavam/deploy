@@ -7,6 +7,6 @@ import (
 
 command: dump: {
 	task: print: cli.Print & {
-		text: yaml.MarshalStream(projects)
+		text: yaml.MarshalStream(configs)
 	}
 }
