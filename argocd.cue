@@ -1,11 +1,11 @@
 package katt
 
-let clusterNames = [ "mini", "imac", "mbpro", "immanent"]
-
 let groups = {
 	spiral: [ "mini", "imac", "mbpro"]
 	dev: [ "immanent"]
 }
+
+let clusterNames = [ for _, g in groups for c in g {c}]
 
 for c in clusterNames {
 	project: #ArgoProject & {
