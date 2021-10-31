@@ -5,15 +5,10 @@ let groups = {
 	dev: [ "immanent"]
 }
 
-let clusterNames = [ for _, g in groups for c in g {c}]
-
-for c in clusterNames {
+for gname, g in groups for c in g {
 	project: #ArgoProject & {
 		"\(c)": {}
 	}
-}
-
-for gname, g in groups for c in g {
 	group: #ArgoGroupCluster & {
 		"\(gname)": "\(c)": {}
 	}
