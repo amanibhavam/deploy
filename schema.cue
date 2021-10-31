@@ -29,7 +29,7 @@ package katt
 	}
 }
 
-#ArgoCluster: [GROUP=string]: [CLUSTER=string]: {
+#ArgoGroupCluster: [GROUP=string]: [CLUSTER=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "Application"
 	metadata: {

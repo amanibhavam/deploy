@@ -14,7 +14,7 @@ for c in clusterNames {
 }
 
 for gname, g in groups for c in g {
-	group: #ArgoCluster & {
+	group: #ArgoGroupCluster & {
 		"\(gname)": "\(c)": {}
 	}
 }
