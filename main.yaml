@@ -87,7 +87,7 @@ spec:
   project: mini
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: mini/deploy
+    path: c/mini/deploy
     targetRevision: master
   destination:
     name: in-cluster
@@ -106,7 +106,7 @@ spec:
   project: imac
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: imac/deploy
+    path: c/imac/deploy
     targetRevision: master
   destination:
     name: in-cluster
@@ -125,7 +125,7 @@ spec:
   project: mbpro
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: mbpro/deploy
+    path: c/mbpro/deploy
     targetRevision: master
   destination:
     name: in-cluster
@@ -144,7 +144,7 @@ spec:
   project: immanent
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: immanent/deploy
+    path: c/immanent/deploy
     targetRevision: master
   destination:
     name: in-cluster

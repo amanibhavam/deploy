@@ -40,7 +40,7 @@ package katt
 		project: CLUSTER
 		source: {
 			repoURL:        "https://github.com/amanibhavam/deploy"
-			path:           "\(CLUSTER)/deploy"
+			path:           "c/\(CLUSTER)/deploy"
 			targetRevision: "master"
 		}
 		destination: {
