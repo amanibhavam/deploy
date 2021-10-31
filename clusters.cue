@@ -1,5 +1,20 @@
 package katt
 
+let clusters = [ "mini", "imac", "mbpro", "immanent"]
+
+let groups = {
+	spiral: [ "mini", "imac", "mbpro"]
+	dev: [ "immanent"]
+}
+
+for c in clusters {
+	appProject: "\(c)": {}
+}
+
+for gname, g in groups for c in g {
+	group: "\(gname)": application: "\(c)": {}
+}
+
 appProject: [NAME=string]: {
 	apiVersion: "argoproj.io/v1alpha1"
 	kind:       "AppProject"
@@ -53,13 +68,3 @@ group: [GROUP=string]: application: [NAME=string]: {
 		}
 	}
 }
-
-appProject: "mini": {}
-appProject: "imac": {}
-appProject: "mbpro": {}
-appProject: "immanent": {}
-
-group: "spiral": application: "mini": {}
-group: "spiral": application: "imac": {}
-group: "spiral": application: "mbpro": {}
-group: "dev": application: "immanent": {}
