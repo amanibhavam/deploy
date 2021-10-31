@@ -2,7 +2,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: imac
+  name: mbpro
   namespace: argocd
 spec:
   sourceRepos:
@@ -22,13 +22,13 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: spiral--imac
+  name: spiral--mbpro
   namespace: argocd
 spec:
-  project: imac
+  project: mbpro
   source:
-    repoURL: 'https://github.com/amanibhavam/spiral-imac'
-    path: deploy
+    repoURL: 'https://github.com/amanibhavam/deploy'
+    path: mbpro/deploy
     targetRevision: master
   destination:
     name: in-cluster
