@@ -53,3 +53,21 @@ package katt
 		}
 	}
 }
+
+#ArgoApplication: [CLUSTER=string]: [APP=string]: {
+	apiVersion: "argoproj.io/v1alpha1"
+	kind:       "Application"
+	metadata: name: "\(CLUSTER)--\(APP)"
+	namespace: "argocd"
+	spec: project:   CLUSTER
+	source: repoURL: string | *'https://github.com/amanibhavam/deploy'
+	path:           string | *"\(CLUSTER)/\(APP)"
+	targetRevision: string | *"master"
+	destination: {
+		name:      CLUSTER
+		namespace: string | *APP
+	}
+	syncPolicy: automated: prune: true
+	selfHeal: true
+	syncOptions: [{CreateNamespace: bool | *true}]
+}
