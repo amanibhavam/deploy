@@ -81,17 +81,80 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: imac--2048
+  name: mini--kuma-global
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/kuma-global
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mini--cilium
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/cilium
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mini--pihole
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/pihole
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: imac--kuma-zone
   namespace: argocd
 spec:
   project: imac
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/2048
+    path: c/imac/kuma-zone
     targetRevision: master
   destination:
     name: imac
-    namespace: katt-2048
+    namespace: kuma-system
   syncPolicy:
     automated:
       prune: true
@@ -119,27 +182,6 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=false
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--kuma-zone
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/kuma-zone
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: kuma-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -176,6 +218,216 @@ spec:
   destination:
     name: imac
     namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: imac--2048
+  namespace: argocd
+spec:
+  project: imac
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/imac/2048
+    targetRevision: master
+  destination:
+    name: imac
+    namespace: katt-2048
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--kuma-zone
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/kuma-zone
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--cilium
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/cilium
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--pihole
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/pihole
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--2048
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/2048
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: katt-2048
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immanent--kuma-zone
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/immanent/kuma-zone
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immanent--argo-workflows
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/immanent/argo-workflows
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: argo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immanent--traefik
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/immanent/traefik
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immanent--traefik-forward-auth
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: https://github.com/letfn/katt-traefik-forward-auth
+    path: google
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: immanent--metacontroller
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/immanent/metacontroller
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: metacontroller
   syncPolicy:
     automated:
       prune: true
