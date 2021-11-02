@@ -8,14 +8,14 @@ let groups = {
 let apps = {
 	imac: {
 		"2048": {
-			destination: namespace: "katt-2048"
+			spec: destination: namespace: "katt-2048"
 		}
 		cilium: {
-			destination: namespace: "kube-system"
-			syncOptions: [{CreateNamespace: false}]
+			spec: destination: namespace: "kube-system"
+			spec: syncPolicy: syncOptions: ["CreateNamespace=false"]
 		}
 		"kuma-zone": {
-			destination: namespace: "kuma-system"
+			spec: destination: namespace: "kuma-system"
 		}
 		pihole: {}
 		traefik: {}
