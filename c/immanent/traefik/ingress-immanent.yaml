@@ -15,11 +15,8 @@ kind: IngressRoute
 metadata:
   name: traefik-immanent
 spec:
-  tls:
-    certResolver: letsencrypt
   entryPoints:
     - web
-    - websecure
   routes:
   - match: Host(`immanent.defn.ooo`)
     kind: Rule
