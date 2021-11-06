@@ -13,19 +13,18 @@ spec:
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
-  name: argowf
-  namespace: argo
+  name: hanbaiki
+  namespace: hanbaiki
 spec:
   tls:
     certResolver: letsencrypt
   entryPoints:
     - websecure
   routes:
-  - match: Host(`argo.defn.ooo`)
+  - match: Host(`hanbaiki.defn.ooo`)
     kind: Rule
     services:
-    - name: argo-server
-      port: 2746
-      scheme: https
+    - name: hanbaiki
+      port: 3000
     middlewares:
       - name: traefik-forward-auth
