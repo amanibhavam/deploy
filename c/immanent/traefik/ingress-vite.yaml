@@ -1,0 +1,29 @@
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: traefik-immanent
+spec:
+  type: ExternalName
+  externalName: immanent.defn.ooo
+  ports:
+    - port: 80
+      targetPort: 3000
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-immanent
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`immanent.defn.ooo`)
+    kind: Rule
+    services:
+    - name: traefik-immanent
+      port: 80
+    middlewares:
+      - name: traefik-forward-auth
