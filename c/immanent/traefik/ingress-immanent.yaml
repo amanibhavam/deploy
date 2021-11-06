@@ -25,3 +25,5 @@ spec:
     services:
     - name: traefik-immanent
       port: 80
+    middlewares:
+      - name: traefik-forward-auth
