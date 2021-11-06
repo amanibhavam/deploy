@@ -18,6 +18,7 @@ spec:
   tls:
     certResolver: letsencrypt
   entryPoints:
+    - web
     - websecure
   routes:
   - match: Host(`immanent.defn.ooo`)
