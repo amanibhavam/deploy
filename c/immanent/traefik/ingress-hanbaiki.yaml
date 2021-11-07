@@ -44,6 +44,6 @@ spec:
     kind: Rule
     services:
     - name: hanbaiki-dist
-      port: 3000
+      port: 80
     middlewares:
       - name: traefik-forward-auth
