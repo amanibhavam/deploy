@@ -47,3 +47,22 @@ spec:
       port: 80
     middlewares:
       - name: traefik-forward-auth
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hanbaiki-api
+  namespace: hanbaiki
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`hanbaiki-api.defn.ooo`)
+    kind: Rule
+    services:
+    - name: hanbaiki-api
+      port: 80
+    middlewares:
+      - name: traefik-forward-auth
