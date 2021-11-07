@@ -28,3 +28,22 @@ spec:
       port: 3000
     middlewares:
       - name: traefik-forward-auth
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hanbaiki-dist
+  namespace: hanbaiki
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`hanbaiki-dist.defn.ooo`)
+    kind: Rule
+    services:
+    - name: hanbaiki-dist
+      port: 3000
+    middlewares:
+      - name: traefik-forward-auth
