@@ -333,6 +333,27 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: immanent--kong
+  namespace: argocd
+spec:
+  project: immanent
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/immanent/kong
+    targetRevision: master
+  destination:
+    name: immanent
+    namespace: kong
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: immanent--kuma-zone
   namespace: argocd
 spec:

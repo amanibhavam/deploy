@@ -16,6 +16,7 @@ let apps = {
 	"kuma-zone": {
 		spec: destination: namespace: "kuma-system"
 	}
+	"kong": {}
 	"2048": {
 		spec: destination: namespace: "katt-2048"
 	}
@@ -50,6 +51,7 @@ let clusters = {
 		pihole: {}
 	}
 	immanent: {
+		"kong":           apps["kong"]
 		"kuma-zone":      apps["kuma-zone"]
 		"argo-workflows": apps["argo-workflows"]
 		"traefik": {}
