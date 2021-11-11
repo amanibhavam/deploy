@@ -1,4 +1,4 @@
 all:
 	cue fmt
-	cue dump > out/main.yaml
+	cue dump > o/main.yaml
 	git diff
