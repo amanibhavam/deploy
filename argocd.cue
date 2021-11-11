@@ -30,8 +30,9 @@ let apps = {
 
 let clusters = {
 	imac: {
-		cilium:      apps["cilium"]
-		"kuma-zone": apps["kuma-zone"]
+		cilium:           apps["cilium"]
+		"kuma-zone":      apps["kuma-zone"]
+		"argo-workflows": apps["argo-workflows"]
 		pihole: {}
 		traefik: {}
 	}
