@@ -16,9 +16,6 @@ let apps = {
 		spec: destination: namespace: "kuma-system"
 	}
 	"kong": {}
-	"2048": {
-		spec: destination: namespace: "katt-2048"
-	}
 	"argo-workflows": {
 		spec: destination: namespace: "argo"
 	}
@@ -37,18 +34,17 @@ let clusters = {
 		"kuma-zone": apps["kuma-zone"]
 		pihole: {}
 		traefik: {}
-		"2048": apps["2048"]
 	}
 	mbpro: {
 		cilium:      apps["cilium"]
 		"kuma-zone": apps["kuma-zone"]
 		pihole: {}
-		"2048": apps["2048"]
 	}
 	mini: {
 		cilium:        apps["cilium"]
 		"kuma-global": apps["kuma-global"]
 		pihole: {}
+		traefik: {}
 		"docker-registry": apps["docker-registry"]
 	}
 }

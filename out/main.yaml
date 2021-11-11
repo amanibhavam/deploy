@@ -124,6 +124,27 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: mini--traefik
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/traefik
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: traefik
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: mini--docker-registry
   namespace: argocd
 spec:
@@ -229,27 +250,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: imac--2048
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/2048
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: katt-2048
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: mbpro--cilium
   namespace: argocd
 spec:
@@ -303,27 +303,6 @@ spec:
   destination:
     name: mbpro
     namespace: pihole
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--2048
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/2048
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: katt-2048
   syncPolicy:
     automated:
       prune: true
