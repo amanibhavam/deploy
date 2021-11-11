@@ -1,8 +1,7 @@
 package katt
 
 let groups = {
-	spiral: [ "mini", "imac", "mbpro"]
-	dev: [ "immanent"]
+	spiral: [ "mini", "imac", "mbpro", "katt"]
 }
 
 let apps = {
@@ -50,8 +49,7 @@ let clusters = {
 		cilium:        apps["cilium"]
 		pihole: {}
 	}
-	immanent: {
-		"kong":           apps["kong"]
+	katt: {
 		"kuma-zone":      apps["kuma-zone"]
 		"argo-workflows": apps["argo-workflows"]
 		"traefik": {}

@@ -61,7 +61,7 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: immanent
+  name: katt
   namespace: argocd
 spec:
   sourceRepos:
@@ -333,37 +333,16 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immanent--kong
+  name: katt--kuma-zone
   namespace: argocd
 spec:
-  project: immanent
+  project: katt
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: c/immanent/kong
+    path: c/katt/kuma-zone
     targetRevision: master
   destination:
-    name: immanent
-    namespace: kong
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: immanent--kuma-zone
-  namespace: argocd
-spec:
-  project: immanent
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/immanent/kuma-zone
-    targetRevision: master
-  destination:
-    name: immanent
+    name: katt
     namespace: kuma-system
   syncPolicy:
     automated:
@@ -375,16 +354,16 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immanent--argo-workflows
+  name: katt--argo-workflows
   namespace: argocd
 spec:
-  project: immanent
+  project: katt
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: c/immanent/argo-workflows
+    path: c/katt/argo-workflows
     targetRevision: master
   destination:
-    name: immanent
+    name: katt
     namespace: argo
   syncPolicy:
     automated:
@@ -396,16 +375,16 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immanent--traefik
+  name: katt--traefik
   namespace: argocd
 spec:
-  project: immanent
+  project: katt
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: c/immanent/traefik
+    path: c/katt/traefik
     targetRevision: master
   destination:
-    name: immanent
+    name: katt
     namespace: traefik
   syncPolicy:
     automated:
@@ -417,16 +396,16 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immanent--traefik-forward-auth
+  name: katt--traefik-forward-auth
   namespace: argocd
 spec:
-  project: immanent
+  project: katt
   source:
     repoURL: https://github.com/letfn/katt-traefik-forward-auth
     path: google
     targetRevision: master
   destination:
-    name: immanent
+    name: katt
     namespace: traefik
   syncPolicy:
     automated:
@@ -438,16 +417,16 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: immanent--metacontroller
+  name: katt--metacontroller
   namespace: argocd
 spec:
-  project: immanent
+  project: katt
   source:
     repoURL: https://github.com/amanibhavam/deploy
-    path: c/immanent/metacontroller
+    path: c/katt/metacontroller
     targetRevision: master
   destination:
-    name: immanent
+    name: katt
     namespace: metacontroller
   syncPolicy:
     automated:

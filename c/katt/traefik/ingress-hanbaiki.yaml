@@ -1,0 +1,68 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: Middleware
+metadata:
+  name: traefik-forward-auth
+  namespace: hanbaiki
+spec:
+  forwardAuth:
+    address: http://traefik-forward-auth.traefik.svc.cluster.local:4181
+    authResponseHeaders:
+      - X-Forwarded-User
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hanbaiki
+  namespace: hanbaiki
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`hanbaiki.defn.ooo`)
+    kind: Rule
+    services:
+    - name: hanbaiki
+      port: 3000
+    middlewares:
+      - name: traefik-forward-auth
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hanbaiki-web
+  namespace: hanbaiki
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`hanbaiki-web.defn.ooo`)
+    kind: Rule
+    services:
+    - name: hanbaiki-web
+      port: 80
+    middlewares:
+      - name: traefik-forward-auth
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: hanbaiki-api
+  namespace: hanbaiki
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+    - websecure
+  routes:
+  - match: Host(`hanbaiki-api.defn.ooo`)
+    kind: Rule
+    services:
+    - name: hanbaiki-api
+      port: 80
+    middlewares:
+      - name: traefik-forward-auth
