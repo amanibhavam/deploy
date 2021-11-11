@@ -59,26 +59,6 @@ spec:
       kind: CiliumIdentity
 ---
 apiVersion: argoproj.io/v1alpha1
-kind: AppProject
-metadata:
-  name: katt
-  namespace: argocd
-spec:
-  sourceRepos:
-  - '*'
-  destinations:
-  - namespace: '*'
-    server: '*'
-  clusterResourceWhitelist:
-  - group: '*'
-    kind: '*'
-  orphanedResources:
-    warn: false
-    ignore:
-    - group: cilium.io
-      kind: CiliumIdentity
----
-apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: mini--cilium
@@ -134,6 +114,27 @@ spec:
   destination:
     name: mini
     namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mini--docker-registry
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/docker-registry
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: docker-registry
   syncPolicy:
     automated:
       prune: true
@@ -323,132 +324,6 @@ spec:
   destination:
     name: mbpro
     namespace: katt-2048
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: katt--cilium
-  namespace: argocd
-spec:
-  project: katt
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/katt/cilium
-    targetRevision: master
-  destination:
-    name: katt
-    namespace: kube-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=false
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: katt--kuma-zone
-  namespace: argocd
-spec:
-  project: katt
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/katt/kuma-zone
-    targetRevision: master
-  destination:
-    name: katt
-    namespace: kuma-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: katt--argo-workflows
-  namespace: argocd
-spec:
-  project: katt
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/katt/argo-workflows
-    targetRevision: master
-  destination:
-    name: katt
-    namespace: argo
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: katt--traefik
-  namespace: argocd
-spec:
-  project: katt
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/katt/traefik
-    targetRevision: master
-  destination:
-    name: katt
-    namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: katt--traefik-forward-auth
-  namespace: argocd
-spec:
-  project: katt
-  source:
-    repoURL: https://github.com/letfn/katt-traefik-forward-auth
-    path: google
-    targetRevision: master
-  destination:
-    name: katt
-    namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: katt--metacontroller
-  namespace: argocd
-spec:
-  project: katt
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/katt/metacontroller
-    targetRevision: master
-  destination:
-    name: katt
-    namespace: metacontroller
   syncPolicy:
     automated:
       prune: true

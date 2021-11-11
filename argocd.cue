@@ -1,7 +1,7 @@
 package katt
 
 let groups = {
-	spiral: [ "mini", "imac", "mbpro", "katt"]
+	spiral: [ "mini", "imac", "mbpro"]
 }
 
 let apps = {
@@ -28,6 +28,7 @@ let apps = {
 
 		spec: destination: namespace: "traefik"
 	}
+	"docker-registry": {}
 }
 
 let clusters = {
@@ -48,14 +49,7 @@ let clusters = {
 		cilium:        apps["cilium"]
 		"kuma-global": apps["kuma-global"]
 		pihole: {}
-	}
-	katt: {
-		cilium:           apps["cilium"]
-		"kuma-zone":      apps["kuma-zone"]
-		"argo-workflows": apps["argo-workflows"]
-		"traefik": {}
-		"traefik-forward-auth": apps["traefik-forward-auth"]
-		"metacontroller": {}
+		"docker-registry": apps["docker-registry"]
 	}
 }
 
