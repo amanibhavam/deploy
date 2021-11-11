@@ -4,7 +4,7 @@ kind: Kustomization
 namespace: traefik-mini
 
 resources:
-  - https://github.com/letfn/katt-traefik/relay?ref=0.0.31
+  - https://github.com/letfn/katt-traefik/relay?ref=0.0.32
   - ingress.yaml
 
 patches:
