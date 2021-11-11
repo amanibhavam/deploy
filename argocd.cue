@@ -32,24 +32,25 @@ let apps = {
 
 let clusters = {
 	imac: {
-		"kuma-zone": apps["kuma-zone"]
 		cilium:      apps["cilium"]
+		"kuma-zone": apps["kuma-zone"]
 		pihole: {}
 		traefik: {}
 		"2048": apps["2048"]
 	}
 	mbpro: {
-		"kuma-zone": apps["kuma-zone"]
 		cilium:      apps["cilium"]
+		"kuma-zone": apps["kuma-zone"]
 		pihole: {}
 		"2048": apps["2048"]
 	}
 	mini: {
-		"kuma-global": apps["kuma-global"]
 		cilium:        apps["cilium"]
+		"kuma-global": apps["kuma-global"]
 		pihole: {}
 	}
 	katt: {
+		cilium:           apps["cilium"]
 		"kuma-zone":      apps["kuma-zone"]
 		"argo-workflows": apps["argo-workflows"]
 		"traefik": {}

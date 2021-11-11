@@ -81,27 +81,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mini--kuma-global
-  namespace: argocd
-spec:
-  project: mini
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mini/kuma-global
-    targetRevision: master
-  destination:
-    name: mini
-    namespace: kuma-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: mini--cilium
   namespace: argocd
 spec:
@@ -123,6 +102,27 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: mini--kuma-global
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/kuma-global
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: mini--pihole
   namespace: argocd
 spec:
@@ -134,27 +134,6 @@ spec:
   destination:
     name: mini
     namespace: pihole
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--kuma-zone
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/kuma-zone
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: kuma-system
   syncPolicy:
     automated:
       prune: true
@@ -182,6 +161,27 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: imac--kuma-zone
+  namespace: argocd
+spec:
+  project: imac
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/imac/kuma-zone
+    targetRevision: master
+  destination:
+    name: imac
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -249,27 +249,6 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: mbpro--kuma-zone
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/kuma-zone
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: kuma-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
   name: mbpro--cilium
   namespace: argocd
 spec:
@@ -287,6 +266,27 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=false
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--kuma-zone
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/kuma-zone
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -329,6 +329,27 @@ spec:
       selfHeal: true
     syncOptions:
     - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: katt--cilium
+  namespace: argocd
+spec:
+  project: katt
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/katt/cilium
+    targetRevision: master
+  destination:
+    name: katt
+    namespace: kube-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=false
 ---
 apiVersion: argoproj.io/v1alpha1
 kind: Application
