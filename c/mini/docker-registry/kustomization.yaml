@@ -5,3 +5,4 @@ namespace: docker-registry
 
 resources:
   - https://github.com/letfn/katt-docker-registry/base?ref=0.0.1
+  - ingress.yaml
