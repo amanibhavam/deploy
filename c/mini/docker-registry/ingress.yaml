@@ -10,6 +10,5 @@ spec:
   - match: Host(`registry.mini.defn.ooo`)
     kind: Rule
     services:
-    services:
     - name: docker-registry
       port: 5000
