@@ -1,0 +1,15 @@
+---
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik
+spec:
+  entryPoints:
+    - registry
+  routes:
+  - match: Host(`registry.mini.defn.ooo`)
+    kind: Rule
+    services:
+    services:
+    - name: docker-registry
+      port: 5000

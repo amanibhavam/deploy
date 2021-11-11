@@ -1,0 +1,14 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: traefik-mini
+
+resources:
+  - https://github.com/letfn/katt-traefik/relay?ref=0.0.31
+  - ingress.yaml
+
+patches:
+  - path: patch-cluster-role-binding.yaml
+    target:
+      kind: ClusterRoleBinding
+      name: traefik
