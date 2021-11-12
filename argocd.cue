@@ -30,23 +30,28 @@ let apps = {
 
 let clusters = {
 	imac: {
-		cilium:           apps["cilium"]
-		"kuma-zone":      apps["kuma-zone"]
-		"argo-workflows": apps["argo-workflows"]
+		cilium:            apps["cilium"]
+		"kuma-zone":       apps["kuma-zone"]
+		"argo-workflows":  apps["argo-workflows"]
+		"docker-registry": apps["docker-registry"]
 		pihole: {}
 		traefik: {}
 	}
 	mbpro: {
-		cilium:      apps["cilium"]
-		"kuma-zone": apps["kuma-zone"]
-		pihole: {}
-	}
-	mini: {
-		cilium:        apps["cilium"]
-		"kuma-global": apps["kuma-global"]
+		cilium:            apps["cilium"]
+		"kuma-zone":       apps["kuma-zone"]
+		"argo-workflows":  apps["argo-workflows"]
+		"docker-registry": apps["docker-registry"]
 		pihole: {}
 		traefik: {}
+	}
+	mini: {
+		cilium:            apps["cilium"]
+		"kuma-global":     apps["kuma-global"]
+		"argo-workflows":  apps["argo-workflows"]
 		"docker-registry": apps["docker-registry"]
+		pihole: {}
+		traefik: {}
 	}
 }
 

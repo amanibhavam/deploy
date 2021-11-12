@@ -103,6 +103,48 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: mini--argo-workflows
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/argo-workflows
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: argo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mini--docker-registry
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/docker-registry
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: docker-registry
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: mini--pihole
   namespace: argocd
 spec:
@@ -135,27 +177,6 @@ spec:
   destination:
     name: mini
     namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mini--docker-registry
-  namespace: argocd
-spec:
-  project: mini
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mini/docker-registry
-    targetRevision: master
-  destination:
-    name: mini
-    namespace: docker-registry
   syncPolicy:
     automated:
       prune: true
@@ -219,6 +240,27 @@ spec:
   destination:
     name: imac
     namespace: argo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: imac--docker-registry
+  namespace: argocd
+spec:
+  project: imac
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/imac/docker-registry
+    targetRevision: master
+  destination:
+    name: imac
+    namespace: docker-registry
   syncPolicy:
     automated:
       prune: true
@@ -313,6 +355,48 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: mbpro--argo-workflows
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/argo-workflows
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: argo
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--docker-registry
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/docker-registry
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: docker-registry
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: mbpro--pihole
   namespace: argocd
 spec:
@@ -324,6 +408,27 @@ spec:
   destination:
     name: mbpro
     namespace: pihole
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: mbpro--traefik
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/traefik
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: traefik
   syncPolicy:
     automated:
       prune: true
