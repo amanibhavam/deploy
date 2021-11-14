@@ -28,30 +28,25 @@ let apps = {
 	"docker-registry": {}
 }
 
+#Common: {
+	cilium:            apps["cilium"]
+	"argo-workflows":  apps["argo-workflows"]
+	"docker-registry": apps["docker-registry"]
+	pihole: {}
+	traefik: {}
+
+	[string]: {}
+}
+
 let clusters = {
-	imac: {
-		cilium:            apps["cilium"]
-		"kuma-zone":       apps["kuma-zone"]
-		"argo-workflows":  apps["argo-workflows"]
-		"docker-registry": apps["docker-registry"]
-		pihole: {}
-		traefik: {}
+	imac: #Common & {
+		"kuma-global": apps["kuma-global"]
 	}
-	mbpro: {
-		cilium:            apps["cilium"]
-		"kuma-zone":       apps["kuma-zone"]
-		"argo-workflows":  apps["argo-workflows"]
-		"docker-registry": apps["docker-registry"]
-		pihole: {}
-		traefik: {}
+	mbpro: #Common & {
+		"kuma-zone": apps["kuma-zone"]
 	}
-	mini: {
-		cilium:            apps["cilium"]
-		"kuma-global":     apps["kuma-global"]
-		"argo-workflows":  apps["argo-workflows"]
-		"docker-registry": apps["docker-registry"]
-		pihole: {}
-		traefik: {}
+	mini: #Common & {
+		"kuma-zone": apps["kuma-zone"]
 	}
 }
 
