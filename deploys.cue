@@ -1,5 +1,28 @@
 package katt
 
+deploy: {
+	mbpro: _common & {
+		"kuma-zone": #DeployKumaZone
+	}
+	mini: _common & {
+		"kuma-zone": #DeployKumaZone
+	}
+	imac: _common & {
+		"kuma-global": #DeployKumaGlobal
+	}
+}
+
+deploy: [string]: [string]: #Kustomization
+
+_common: {
+	cilium:            #DeployCilium
+	traefik:           #DeployTraefik
+	"docker-registry": #DeployDockerRegistry
+	"argo-workflows":  #DeployArgoWorkflows
+	pihole:            #DeployPihole
+	[string]:          #Kustomization
+}
+
 #Kustomization: {
 	apiVersion: "kustomize.config.k8s.io/v1beta1"
 	kind:       "Kustomization"
@@ -8,8 +31,6 @@ package katt
 
 	patches?: [...]
 }
-
-deploy: [string]: [string]: #Kustomization
 
 #DeployKumaZone: #Kustomization & {
 	resources: ["https://github.com/letfn/katt-kuma/zone?ref=0.0.7"]
@@ -70,25 +91,4 @@ deploy: [string]: [string]: #Kustomization
 		"https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17",
 		"ingress.yaml",
 	]
-}
-
-_common: {
-	cilium:            #DeployCilium
-	traefik:           #DeployTraefik
-	"docker-registry": #DeployDockerRegistry
-	"argo-workflows":  #DeployArgoWorkflows
-	pihole:            #DeployPihole
-	[string]:          #Kustomization
-}
-
-deploy: {
-	mbpro: _common & {
-		"kuma-zone": #DeployKumaZone
-	}
-	mini: _common & {
-		"kuma-zone": #DeployKumaZone
-	}
-	imac: _common & {
-		"kuma-global": #DeployKumaGlobal
-	}
 }
