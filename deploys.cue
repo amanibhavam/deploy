@@ -72,29 +72,23 @@ deploy: [string]: [string]: #Kustomization
 	]
 }
 
+_common: {
+	cilium:            #DeployCilium
+	traefik:           #DeployTraefik
+	"docker-registry": #DeployDockerRegistry
+	"argo-workflows":  #DeployArgoWorkflows
+	pihole:            #DeployPihole
+	[string]:          #Kustomization
+}
+
 deploy: {
-	mbpro: {
-		cilium:            #DeployCilium
-		"kuma-zone":       #DeployKumaZone
-		traefik:           #DeployTraefik
-		"docker-registry": #DeployDockerRegistry
-		"argo-workflows":  #DeployArgoWorkflows
-		pihole:            #DeployPihole
+	mbpro: _common & {
+		"kuma-zone": #DeployKumaZone
 	}
-	mini: {
-		cilium:            #DeployCilium
-		"kuma-zone":       #DeployKumaZone
-		traefik:           #DeployTraefik
-		"docker-registry": #DeployDockerRegistry
-		"argo-workflows":  #DeployArgoWorkflows
-		pihole:            #DeployPihole
+	mini: _common & {
+		"kuma-zone": #DeployKumaZone
 	}
-	imac: {
-		cilium:            #DeployCilium
-		traefik:           #DeployTraefik
-		"kuma-global":     #DeployKumaGlobal
-		"docker-registry": #DeployDockerRegistry
-		"argo-workflows":  #DeployArgoWorkflows
-		pihole:            #DeployPihole
+	imac: _common & {
+		"kuma-global": #DeployKumaGlobal
 	}
 }
