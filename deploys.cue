@@ -29,19 +29,29 @@ _common: {
 
 	resources?: [...]
 
-	patches?: [...]
+	_patches: {...} | *{}
+
+	patches: [
+		for pname, p in _patches {
+			path: "\(pname).yaml"
+			target: {
+				kind: p.kind
+				name: p.name
+			}
+		},
+	]
 }
 
 #DeployKumaZone: #Kustomization & {
 	resources: ["https://github.com/letfn/katt-kuma/zone?ref=0.0.7"]
 
-	patches: [{
-		path: "patch-deployment-kuma-control-plane.yaml"
-		target: {
+	_patches: {
+		"patch-deployment-kuma-control-plane": {
 			kind: "Deployment"
 			name: "kuma-control-plane"
+			ops: []
 		}
-	}]
+	}
 }
 
 #DeployKumaGlobal: #Kustomization & {
@@ -51,13 +61,13 @@ _common: {
 #DeployCilium: #Kustomization & {
 	resources: ["https://github.com/letfn/katt-cilium/base?ref=0.0.7"]
 
-	patches: [{
-		path: "patch-configmap-cilium-config-cluster-mesh.yaml"
-		target: {
+	_patches: {
+		"patch-configmap-cilium-config-cluster-mesh": {
 			kind: "ConfigMap"
 			name: "cilium-config"
+			ops: []
 		}
-	}]
+	}
 }
 
 #DeployPihole: #Kustomization & {
@@ -73,13 +83,17 @@ _common: {
 		"ingress.yaml",
 	]
 
-	patches: [{
-		path: "patch-cluster-role-binding.yaml"
-		target: {
+	_patches: {
+		"patch-cluster-role-binding": {
 			kind: "ClusterRoleBinding"
 			name: "traefik"
+			ops: [{
+				"op":    "replace"
+				"path":  "/subjects/0/namespace"
+				"value": "traefik-mini"
+			}]
 		}
-	}]
+	}
 }
 
 #DeployDockerRegistry: #Kustomization & {
