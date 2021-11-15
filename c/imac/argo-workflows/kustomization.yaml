@@ -3,3 +3,4 @@ kind: Kustomization
 resources:
 - https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17
 - ingress.yaml
+patches: []
