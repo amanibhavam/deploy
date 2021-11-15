@@ -1,6 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: mbpro--kuma-zone
+  namespace: argocd
+spec:
+  project: mbpro
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mbpro/kuma-zone
+    targetRevision: master
+  destination:
+    name: mbpro
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: mbpro--cilium
   namespace: argocd
 spec:
@@ -96,27 +117,6 @@ spec:
   destination:
     name: mbpro
     namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--kuma-zone
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/kuma-zone
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: kuma-system
   syncPolicy:
     automated:
       prune: true

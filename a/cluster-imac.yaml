@@ -1,6 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: imac--kuma-global
+  namespace: argocd
+spec:
+  project: imac
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/imac/kuma-global
+    targetRevision: master
+  destination:
+    name: imac
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: imac--cilium
   namespace: argocd
 spec:
@@ -96,27 +117,6 @@ spec:
   destination:
     name: imac
     namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--kuma-global
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/kuma-global
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: kuma-system
   syncPolicy:
     automated:
       prune: true

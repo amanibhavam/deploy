@@ -1,6 +1,6 @@
 package katt
 
-let apps = {
+_apps: {
 	cilium: {
 		spec: destination: namespace: "kube-system"
 		spec: syncPolicy: syncOptions: ["CreateNamespace=false"]
@@ -24,36 +24,40 @@ let apps = {
 	"docker-registry": {}
 }
 
-#Common: {
-	cilium:            apps["cilium"]
-	"argo-workflows":  apps["argo-workflows"]
-	"docker-registry": apps["docker-registry"]
+_cluster_apps: {
+	mini: {
+		"kuma-zone": _apps["kuma-zone"]
+	}
+	imac: {
+		"kuma-global": _apps["kuma-global"]
+	}
+	mbpro: {
+		"kuma-zone": _apps["kuma-zone"]
+	}
+}
+
+_cluster_apps: [string]: _common
+
+_common: {
+	cilium:            _apps["cilium"]
+	"argo-workflows":  _apps["argo-workflows"]
+	"docker-registry": _apps["docker-registry"]
 	pihole: {}
 	traefik: {}
-
-	[string]: {}
 }
 
-let clusters = {
-	mini: #Common & {
-		"kuma-zone": apps["kuma-zone"]
-	}
-	imac: #Common & {
-		"kuma-global": apps["kuma-global"]
-	}
-	mbpro: #Common & {
-		"kuma-zone": apps["kuma-zone"]
-	}
-}
+project: #ArgoProject
 
-for cname, c in clusters {
-	project: #ArgoProject & {
+application: #ArgoApplication
+
+for cname, apps in _cluster_apps {
+	project: {
 		"\(cname)": {}
 	}
 
-	for aname, app in clusters[cname] {
-		application: #ArgoApplication & {
-			"\(cname)": "\(aname)": app
+	for aname, a in apps {
+		application: {
+			"\(cname)": "\(aname)": a
 		}
 	}
 }

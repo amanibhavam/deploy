@@ -1,6 +1,27 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
+  name: mini--kuma-zone
+  namespace: argocd
+spec:
+  project: mini
+  source:
+    repoURL: https://github.com/amanibhavam/deploy
+    path: c/mini/kuma-zone
+    targetRevision: master
+  destination:
+    name: mini
+    namespace: kuma-system
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+    - CreateNamespace=true
+---
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
   name: mini--cilium
   namespace: argocd
 spec:
@@ -96,27 +117,6 @@ spec:
   destination:
     name: mini
     namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mini--kuma-zone
-  namespace: argocd
-spec:
-  project: mini
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mini/kuma-zone
-    targetRevision: master
-  destination:
-    name: mini
-    namespace: kuma-system
   syncPolicy:
     automated:
       prune: true
