@@ -1,9 +1,5 @@
 package katt
 
-let groups = {
-	spiral: [ "mini", "imac", "mbpro"]
-}
-
 let apps = {
 	cilium: {
 		spec: destination: namespace: "kube-system"
@@ -39,24 +35,20 @@ let apps = {
 }
 
 let clusters = {
+	mini: #Common & {
+		"kuma-zone": apps["kuma-zone"]
+	}
 	imac: #Common & {
 		"kuma-global": apps["kuma-global"]
 	}
 	mbpro: #Common & {
 		"kuma-zone": apps["kuma-zone"]
 	}
-	mini: #Common & {
-		"kuma-zone": apps["kuma-zone"]
-	}
 }
 
-for gname, cs in groups for cname in cs {
+for cname, c in clusters {
 	project: #ArgoProject & {
 		"\(cname)": {}
-	}
-
-	group: #ArgoGroupCluster & {
-		"\(gname)": "\(cname)": {}
 	}
 
 	for aname, app in clusters[cname] {
