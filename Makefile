@@ -2,4 +2,4 @@ all:
 	cue fmt
 	cue argocd
 	cue kustomize
-	git diff o c
+	git diff a c

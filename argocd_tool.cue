@@ -6,8 +6,14 @@ import (
 )
 
 command: argocd: {
-	"create-main.yaml": file.Create & {
-		filename: "o/main.yaml"
-		contents: yaml.MarshalStream(configs)
+	"projects": file.Create & {
+		filename: "a/projects.yaml"
+		contents: yaml.MarshalStream(projects)
+	}
+	for cname, apps in applications {
+		"cluster-\(cname)": file.Create & {
+			filename: "a/cluster-\(cname).yaml"
+			contents: yaml.MarshalStream(apps)
+		}
 	}
 }
