@@ -1,2 +1,3 @@
 cue 0.4.0
 kubectl 1.21.6
+kustomize 4.2.0

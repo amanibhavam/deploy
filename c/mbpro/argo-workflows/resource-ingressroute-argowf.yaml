@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: argowf
+  namespace: argo
+spec:
+  tls:
+    certResolver: letsencrypt
+  entryPoints:
+  - websecure
+  routes:
+  - match: Host(`argo.mbpro.defn.ooo`)
+    kind: Rule
+    services:
+    - name: argo-server
+      port: 2746
+      scheme: https
+    middlewares:
+    - name: traefik-forward-auth

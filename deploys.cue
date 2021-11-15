@@ -1,5 +1,7 @@
 package katt
 
+import "strings"
+
 deploy: {
 	mbpro: _common & {
 		"kuma-zone": #DeployKumaZone & {
@@ -36,12 +38,16 @@ deploy: {
 	}
 
 	[string]: [string]: #Kustomization
-	[CNAME=string]: [string]: _cname: CNAME
+	[CNAME=string]: [ANAME=string]: {
+		_domain: "defn.ooo"
+		_cname:  CNAME
+		_aname:  ANAME
+	}
 
 	#DeployKumaZone: CFG=#Kustomization & {
 		_kuma_global_address: string
 
-		resources: ["https://github.com/letfn/katt-kuma/zone?ref=0.0.7"]
+		_upstream: "https://github.com/letfn/katt-kuma/zone?ref=0.0.7"
 
 		_patches: {
 			"deployment-kuma-control-plane": {
@@ -67,14 +73,14 @@ deploy: {
 	}
 
 	#DeployKumaGlobal: #Kustomization & {
-		resources: ["https://github.com/letfn/katt-kuma/global?ref=0.0.7"]
+		_upstream: "https://github.com/letfn/katt-kuma/global?ref=0.0.7"
 	}
 
 	#DeployCilium: CFG=#Kustomization & {
 		_cilium_cluster_id:        string
 		_cilium_cluster_ipv4_cidr: string
 
-		resources: ["https://github.com/letfn/katt-cilium/base?ref=0.0.7"]
+		_upstream: "https://github.com/letfn/katt-cilium/base?ref=0.0.7"
 
 		_patches: {
 			"configmap-cilium-config-cluster-mesh": {
@@ -97,18 +103,58 @@ deploy: {
 		}
 	}
 
-	#DeployPihole: #Kustomization & {
-		resources: [
-			"https://github.com/letfn/katt-pihole/base?ref=0.0.17",
-			"ingress.yaml",
-		]
+	#DeployPihole: CFG=#Kustomization & {
+		_upstream: "https://github.com/letfn/katt-pihole/base?ref=0.0.17"
+
+		_resources: [{
+			apiVersion: "traefik.containo.us/v1alpha1"
+			kind:       "IngressRoute"
+			metadata: {
+				name:      "pihole"
+				namespace: "pihole"
+			}
+			spec: {
+				entryPoints: [ "web"]
+				routes: [{
+					match: "Host(`pihole.\(CFG._cname).\(CFG._domain)`)"
+					kind:  "Rule"
+					services: [{
+						name: "pihole-web"
+						port: 80
+					}]
+				}]
+			}
+		}]
 	}
 
 	#DeployTraefik: CFG=#Kustomization & {
-		resources: [
-			"https://github.com/letfn/katt-traefik/relay?ref=0.0.33",
-			"ingress.yaml",
-		]
+		_upstream: "https://github.com/letfn/katt-traefik/relay?ref=0.0.33"
+
+		_resources: [{
+			apiVersion: "traefik.containo.us/v1alpha1"
+			kind:       "IngressClass"
+			metadata: {
+				name: "traefik"
+			}
+			spec: controller: "traefik.io/ingress-controller"
+		}, {
+			apiVersion: "traefik.containo.us/v1alpha1"
+			kind:       "IngressRoute"
+			metadata: {
+				name: "traefik"
+			}
+			spec: {
+				entryPoints: [ "web"]
+				routes: [{
+					match: "Host(`traefik.\(CFG._cname).\(CFG._domain)`)"
+					kind:  "Rule"
+					services: [{
+						name: "api@internal"
+						kind: "TraefikService"
+					}]
+				}]
+			}
+		}]
 
 		_patches: {
 			"cluster-role-binding": {
@@ -124,14 +170,49 @@ deploy: {
 	}
 
 	#DeployDockerRegistry: #Kustomization & {
-		resources: ["https://github.com/letfn/katt-docker-registry/base?ref=0.0.2"]
+		_upstream: "https://github.com/letfn/katt-docker-registry/base?ref=0.0.2"
 	}
 
-	#DeployArgoWorkflows: #Kustomization & {
-		resources: [
-			"https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17",
-			"ingress.yaml",
-		]
+	#DeployArgoWorkflows: CFG=#Kustomization & {
+		_upstream: "https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17"
+
+		_resources: [{
+			apiVersion: "traefik.containo.us/v1alpha1"
+			kind:       "Middleware"
+			metadata: {
+				name:      "traefik-forward-auth"
+				namespace: "argo"
+			}
+			spec: {
+				forwardAuth: {
+					address: http:
+						authResponseHeaders: ["X-Forwarded-User"] //traefik-forward-auth.traefik.svc.cluster.local:4181
+				}
+			}
+		}, {
+			apiVersion: "traefik.containo.us/v1alpha1"
+			kind:       "IngressRoute"
+			metadata: {
+				name:      "argowf"
+				namespace: "argo"
+			}
+			spec: {
+				tls: certResolver: "letsencrypt"
+				entryPoints: [ "websecure"]
+				routes: [{
+					match: "Host(`argo.\(CFG._cname).\(CFG._domain)`)"
+					kind:  "Rule"
+					services: [{
+						name:   "argo-server"
+						port:   2746
+						scheme: "https"
+					}]
+					middlewares: [{
+						name: "traefik-forward-auth"
+					}]
+				}]
+			}
+		}]
 	}
 }
 
@@ -139,15 +220,24 @@ deploy: {
 	apiVersion: "kustomize.config.k8s.io/v1beta1"
 	kind:       "Kustomization"
 
-	resources?: [...]
+	_cname:  string
+	_aname:  string
+	_domain: string
 
-	_cname: string
+	_upstream:  string
+	_resources: [...] | *[]
+
+	resources: [_upstream] + [
+			for rname, r in _resources {
+			strings.ToLower("resource-\(r.kind)-\(r.metadata.name).yaml")
+		},
+	]
 
 	_patches: {...} | *{}
 
 	patches: [
 		for pname, p in _patches {
-			path: "patch-\(pname).yaml"
+			path: strings.ToLower("patch-\(pname).yaml")
 			target: {
 				kind: p.kind
 				name: p.name

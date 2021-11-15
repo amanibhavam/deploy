@@ -2,7 +2,8 @@ apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
 resources:
 - https://github.com/letfn/katt-traefik/relay?ref=0.0.33
-- ingress.yaml
+- resource-ingressclass-traefik.yaml
+- resource-ingressroute-traefik.yaml
 patches:
 - path: patch-cluster-role-binding.yaml
   target:
