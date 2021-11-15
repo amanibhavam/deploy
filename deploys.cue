@@ -34,17 +34,17 @@ deploy: {
 		"docker-registry": #DeployDockerRegistry
 		"argo-workflows":  #DeployArgoWorkflows
 		pihole:            #DeployPihole
-		[string]:          #Kustomization
+		[string]:          #DeployApplication
 	}
 
-	[string]: [string]: #Kustomization
+	[string]: [string]: #DeployApplication
 	[CNAME=string]: [ANAME=string]: {
 		_domain: "defn.ooo"
 		_cname:  CNAME
 		_aname:  ANAME
 	}
 
-	#DeployKumaZone: CFG=#Kustomization & {
+	#DeployKumaZone: CFG=#DeployApplication & {
 		_kuma_global_address: string
 
 		_upstream: "https://github.com/letfn/katt-kuma/zone?ref=0.0.7"
@@ -72,11 +72,11 @@ deploy: {
 		}
 	}
 
-	#DeployKumaGlobal: #Kustomization & {
+	#DeployKumaGlobal: #DeployApplication & {
 		_upstream: "https://github.com/letfn/katt-kuma/global?ref=0.0.7"
 	}
 
-	#DeployCilium: CFG=#Kustomization & {
+	#DeployCilium: CFG=#DeployApplication & {
 		_cilium_cluster_id:        string
 		_cilium_cluster_ipv4_cidr: string
 
@@ -103,7 +103,7 @@ deploy: {
 		}
 	}
 
-	#DeployPihole: CFG=#Kustomization & {
+	#DeployPihole: CFG=#DeployApplication & {
 		_upstream: "https://github.com/letfn/katt-pihole/base?ref=0.0.17"
 
 		_resources: [{
@@ -127,7 +127,7 @@ deploy: {
 		}]
 	}
 
-	#DeployTraefik: CFG=#Kustomization & {
+	#DeployTraefik: CFG=#DeployApplication & {
 		_upstream: "https://github.com/letfn/katt-traefik/relay?ref=0.0.33"
 
 		_resources: [{
@@ -169,11 +169,11 @@ deploy: {
 		}
 	}
 
-	#DeployDockerRegistry: #Kustomization & {
+	#DeployDockerRegistry: #DeployApplication & {
 		_upstream: "https://github.com/letfn/katt-docker-registry/base?ref=0.0.2"
 	}
 
-	#DeployArgoWorkflows: CFG=#Kustomization & {
+	#DeployArgoWorkflows: CFG=#DeployApplication & {
 		_upstream: "https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17"
 
 		_resources: [{
@@ -216,7 +216,7 @@ deploy: {
 	}
 }
 
-#Kustomization: {
+#DeployApplication: {
 	apiVersion: "kustomize.config.k8s.io/v1beta1"
 	kind:       "Kustomization"
 
