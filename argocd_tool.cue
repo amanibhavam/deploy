@@ -5,7 +5,7 @@ import (
 	"tool/file"
 )
 
-command: dump: {
+command: argocd: {
 	"create-main.yaml": file.Create & {
 		filename: "o/main.yaml"
 		contents: yaml.MarshalStream(configs)

@@ -1,5 +1,5 @@
 all:
 	cue fmt
-	cue dump
+	cue argocd
 	cue kustomize
 	git diff o c
