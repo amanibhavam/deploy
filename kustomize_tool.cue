@@ -15,5 +15,11 @@ command: kustomize: {
 			filename: "c/\(cname)/\(aname)/kustomization.yaml"
 			contents: yaml.Marshal(a)
 		}
+		for pname, p in a._patches {
+			"patch-\(cname)-\(aname)-\(pname)": file.Create & {
+				filename: "c/\(cname)/\(aname)/patch-\(pname).yaml"
+				contents: yaml.Marshal(p.ops)
+			}
+		}
 	}
 }

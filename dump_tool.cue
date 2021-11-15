@@ -2,11 +2,12 @@ package katt
 
 import (
 	"encoding/yaml"
-	"tool/cli"
+	"tool/file"
 )
 
 command: dump: {
-	task: print: cli.Print & {
-		text: yaml.MarshalStream(configs)
+	"create-main.yaml": file.Create & {
+		filename: "o/main.yaml"
+		contents: yaml.MarshalStream(configs)
 	}
 }

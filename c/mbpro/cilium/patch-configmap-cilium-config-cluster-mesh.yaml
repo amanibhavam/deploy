@@ -3,7 +3,7 @@
   value: "103"
 - op: replace
   path: /data/cluster-name
-  value: "mbpro"
+  value: mbpro
 - op: replace
   path: /data/cluster-pool-ipv4-cidr
-  value: "10.83.0.0/16"
+  value: 10.83.0.0/16
