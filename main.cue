@@ -1,6 +1,8 @@
 package boot
 
-import "strings"
+import (
+	"github.com/defn/boot"
+)
 
 _apps: {
 	cilium: {
@@ -48,9 +50,9 @@ _common: {
 	traefik: {}
 }
 
-project: #ArgoProject
+project: boot.#ArgoProject
 
-application: #ArgoApplication
+application: boot.#ArgoApplication
 
 for cname, apps in _cluster_apps {
 	project: {
@@ -60,88 +62,6 @@ for cname, apps in _cluster_apps {
 	for aname, a in apps {
 		application: {
 			"\(cname)": "\(aname)": a
-		}
-	}
-}
-
-#ArgoProject: [CLUSTER=string]: {
-	apiVersion: "argoproj.io/v1alpha1"
-	kind:       "AppProject"
-	metadata: {
-		name:      CLUSTER
-		namespace: "argocd"
-	}
-	spec: {
-		sourceRepos: [
-			"*",
-		]
-		destinations: [{
-			namespace: "*"
-			server:    "*"
-		}]
-		clusterResourceWhitelist: [{
-			group: "*"
-			kind:  "*"
-		}]
-		orphanedResources: {
-			warn: false
-			ignore: [{
-				group: "cilium.io"
-				kind:  "CiliumIdentity"
-			}]
-		}
-	}
-}
-
-#ArgoGroupCluster: [GROUP=string]: [CLUSTER=string]: {
-	apiVersion: "argoproj.io/v1alpha1"
-	kind:       "Application"
-	metadata: {
-		name:      "\(GROUP)--\(CLUSTER)"
-		namespace: "argocd"
-	}
-	spec: {
-		project: CLUSTER
-		source: {
-			repoURL:        "https://github.com/amanibhavam/deploy"
-			path:           "c/\(CLUSTER)/deploy"
-			targetRevision: "master"
-		}
-		destination: {
-			name:      "in-cluster"
-			namespace: "argocd"
-		}
-		syncPolicy: automated: {
-			prune:    true
-			selfHeal: true
-		}
-	}
-}
-
-#ArgoApplication: [CLUSTER=string]: [APP=string]: {
-	apiVersion: "argoproj.io/v1alpha1"
-	kind:       "Application"
-	metadata: {
-		name:      "\(CLUSTER)--\(APP)"
-		namespace: "argocd"
-	}
-	spec: {
-		project: CLUSTER
-		source: {
-			repoURL:        string | *'https://github.com/amanibhavam/deploy'
-			path:           string | *"c/\(CLUSTER)/\(APP)"
-			targetRevision: string | *"master"
-		}
-		destination: {
-			name:      CLUSTER
-			namespace: string | *APP
-		}
-		syncPolicy: {
-			automated: {
-				prune:    true
-				selfHeal: true
-			}
-			syncOptions: [ string] | *[ "CreateNamespace=true"]
 		}
 	}
 }
@@ -183,14 +103,14 @@ deploy: {
 	}
 
 	// Every app is a DeployBase with useful names
-	[CNAME=string]: [ANAME=string]: #DeployBase & {
+	[CNAME=string]: [ANAME=string]: boot.#DeployBase & {
 		_domain: "defn.ooo"
 		_cname:  CNAME
 		_aname:  ANAME
 	}
 }
 
-#DeployKumaZone: CFG=#DeployBase & {
+#DeployKumaZone: CFG=boot.#DeployBase & {
 	_kuma_global_address: string
 
 	_upstream: "https://github.com/letfn/katt-kuma/zone?ref=0.0.7"
@@ -218,11 +138,11 @@ deploy: {
 	}
 }
 
-#DeployKumaGlobal: #DeployBase & {
+#DeployKumaGlobal: boot.#DeployBase & {
 	_upstream: "https://github.com/letfn/katt-kuma/global?ref=0.0.7"
 }
 
-#DeployCilium: CFG=#DeployBase & {
+#DeployCilium: CFG=boot.#DeployBase & {
 	_cilium_cluster_id:        string
 	_cilium_cluster_ipv4_cidr: string
 
@@ -249,7 +169,7 @@ deploy: {
 	}
 }
 
-#DeployPihole: CFG=#DeployBase & {
+#DeployPihole: CFG=boot.#DeployBase & {
 	_upstream: "https://github.com/letfn/katt-pihole/base?ref=0.0.17"
 
 	_resources: [{
@@ -273,7 +193,7 @@ deploy: {
 	}]
 }
 
-#DeployTraefik: CFG=#DeployBase & {
+#DeployTraefik: CFG=boot.#DeployBase & {
 	_upstream: "https://github.com/letfn/katt-traefik/relay?ref=0.0.33"
 
 	_resources: [{
@@ -315,11 +235,11 @@ deploy: {
 	}
 }
 
-#DeployDockerRegistry: #DeployBase & {
+#DeployDockerRegistry: boot.#DeployBase & {
 	_upstream: "https://github.com/letfn/katt-docker-registry/base?ref=0.0.2"
 }
 
-#DeployArgoWorkflows: CFG=#DeployBase & {
+#DeployArgoWorkflows: CFG=boot.#DeployBase & {
 	_upstream: "https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17"
 
 	_resources: [{
@@ -359,34 +279,4 @@ deploy: {
 			}]
 		}
 	}]
-}
-
-#DeployBase: {
-	apiVersion: "kustomize.config.k8s.io/v1beta1"
-	kind:       "Kustomization"
-
-	_cname:  string
-	_aname:  string
-	_domain: string
-
-	_upstream:  string
-	_resources: [...] | *[]
-
-	resources: [_upstream] + [
-			for rname, r in _resources {
-			strings.ToLower("resource-\(r.kind)-\(r.metadata.name).yaml")
-		},
-	]
-
-	_patches: {...} | *{}
-
-	patches: [
-		for pname, p in _patches {
-			path: strings.ToLower("patch-\(pname).yaml")
-			target: {
-				kind: p.kind
-				name: p.name
-			}
-		},
-	]
 }
