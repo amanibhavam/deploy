@@ -16,9 +16,7 @@ cfg: argocd: boot.#ArgoCD & {
 	clusters: {
 		for cname, c in cluster {
 			"\(cname)": [
-				for aname, a in c {
-					a.app
-				},
+				for aname, a in c {a.app},
 			]
 		}
 	}
@@ -28,9 +26,7 @@ cfg: kustomize: boot.#Kustomize & {
 	clusters: {
 		for cname, c in cluster {
 			"\(cname)": [
-				for aname, a in c {
-					a.deploy
-				},
+				for aname, a in c {a.deploy},
 			]
 		}
 	}
