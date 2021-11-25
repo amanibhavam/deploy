@@ -1,4 +1,4 @@
-package katt
+package boot
 
 import (
 	"encoding/yaml"
