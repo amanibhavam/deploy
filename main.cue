@@ -31,6 +31,18 @@ app: {
 
 cluster: {
 	// Unique apps, deploys
+	imac: {
+		"kuma-global": {
+			app:    app["kuma-global"]
+			deploy: #DeployKumaGlobal
+		}
+		cilium: {
+			deploy: #DeployCilium & {
+				_cilium_cluster_id:        "102"
+				_cilium_cluster_ipv4_cidr: "10.82.0.0/16"
+			}
+		}
+	}
 	mini: {
 		"kuma-zone": {
 			app:    app["kuma-zone"]
@@ -42,18 +54,6 @@ cluster: {
 			deploy: #DeployCilium & {
 				_cilium_cluster_id:        "101"
 				_cilium_cluster_ipv4_cidr: "10.81.0.0/16"
-			}
-		}
-	}
-	imac: {
-		"kuma-global": {
-			app:    app["kuma-global"]
-			deploy: #DeployKumaGlobal
-		}
-		cilium: {
-			deploy: #DeployCilium & {
-				_cilium_cluster_id:        "102"
-				_cilium_cluster_ipv4_cidr: "10.82.0.0/16"
 			}
 		}
 	}
