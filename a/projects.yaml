@@ -1,26 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
-  name: mini
-  namespace: argocd
-spec:
-  sourceRepos:
-  - '*'
-  destinations:
-  - namespace: '*'
-    server: '*'
-  clusterResourceWhitelist:
-  - group: '*'
-    kind: '*'
-  orphanedResources:
-    warn: false
-    ignore:
-    - group: cilium.io
-      kind: CiliumIdentity
----
-apiVersion: argoproj.io/v1alpha1
-kind: AppProject
-metadata:
+  bootCluster: imac
   name: imac
   namespace: argocd
 spec:
@@ -41,6 +22,28 @@ spec:
 apiVersion: argoproj.io/v1alpha1
 kind: AppProject
 metadata:
+  bootCluster: mini
+  name: mini
+  namespace: argocd
+spec:
+  sourceRepos:
+  - '*'
+  destinations:
+  - namespace: '*'
+    server: '*'
+  clusterResourceWhitelist:
+  - group: '*'
+    kind: '*'
+  orphanedResources:
+    warn: false
+    ignore:
+    - group: cilium.io
+      kind: CiliumIdentity
+---
+apiVersion: argoproj.io/v1alpha1
+kind: AppProject
+metadata:
+  bootCluster: mbpro
   name: mbpro
   namespace: argocd
 spec:

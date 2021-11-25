@@ -1,125 +1,132 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--kuma-zone
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/kuma-zone
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: kuma-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--cilium
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/cilium
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: kube-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=false
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--argo-workflows
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/argo-workflows
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: argo
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--docker-registry
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/docker-registry
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: docker-registry
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--pihole
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/pihole
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: pihole
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: mbpro--traefik
-  namespace: argocd
-spec:
-  project: mbpro
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/mbpro/traefik
-    targetRevision: master
-  destination:
-    name: mbpro
-    namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: mbpro
+    bootApp: kuma-zone
+    name: mbpro--kuma-zone
+    namespace: argocd
+  spec:
+    project: mbpro
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/mbpro/kuma-zone
+      targetRevision: master
+    destination:
+      name: mbpro
+      namespace: kuma-system
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: mbpro
+    bootApp: cilium
+    name: mbpro--cilium
+    namespace: argocd
+  spec:
+    project: mbpro
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/mbpro/cilium
+      targetRevision: master
+    destination:
+      name: mbpro
+      namespace: kube-system
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=false
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: mbpro
+    bootApp: traefik
+    name: mbpro--traefik
+    namespace: argocd
+  spec:
+    project: mbpro
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/mbpro/traefik
+      targetRevision: master
+    destination:
+      name: mbpro
+      namespace: traefik
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: mbpro
+    bootApp: argo-workflows
+    name: mbpro--argo-workflows
+    namespace: argocd
+  spec:
+    project: mbpro
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/mbpro/argo-workflows
+      targetRevision: master
+    destination:
+      name: mbpro
+      namespace: argo
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: mbpro
+    bootApp: docker-registry
+    name: mbpro--docker-registry
+    namespace: argocd
+  spec:
+    project: mbpro
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/mbpro/docker-registry
+      targetRevision: master
+    destination:
+      name: mbpro
+      namespace: docker-registry
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: mbpro
+    bootApp: pihole
+    name: mbpro--pihole
+    namespace: argocd
+  spec:
+    project: mbpro
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/mbpro/pihole
+      targetRevision: master
+    destination:
+      name: mbpro
+      namespace: pihole
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true

@@ -4,8 +4,40 @@ import (
 	"github.com/defn/boot"
 )
 
+// Boot configuration
+cfg: argocd: boot.#ArgoCD & {
+	projects: [
+		for cname, c in cluster {
+			boot.#ArgoProject & {
+				metadata: bootCluster: cname
+			}
+		},
+	]
+	clusters: {
+		for cname, c in cluster {
+			"\(cname)": [
+				for aname, a in c {
+					a.app
+				},
+			]
+		}
+	}
+}
+
+cfg: kustomize: boot.#Kustomize & {
+	clusters: {
+		for cname, c in cluster {
+			"\(cname)": [
+				for aname, a in c {
+					a.deploy
+				},
+			]
+		}
+	}
+}
+
 // ArgoCD Applications
-app: {
+application: {
 	cilium: {
 		spec: destination: namespace: "kube-system"
 		spec: syncPolicy: syncOptions: ["CreateNamespace=false"]
@@ -33,79 +65,84 @@ cluster: {
 	// Unique apps, deploys
 	imac: {
 		"kuma-global": {
-			app:    app["kuma-global"]
+			app:    application["kuma-global"]
 			deploy: #DeployKumaGlobal
 		}
 		cilium: {
 			deploy: #DeployCilium & {
-				_cilium_cluster_id:        "102"
-				_cilium_cluster_ipv4_cidr: "10.82.0.0/16"
+				cilium_cluster_id:        "102"
+				cilium_cluster_ipv4_cidr: "10.82.0.0/16"
 			}
 		}
 	}
 	mini: {
 		"kuma-zone": {
-			app:    app["kuma-zone"]
+			app:    application["kuma-zone"]
 			deploy: #DeployKumaZone & {
-				_kuma_global_address: "grpcs://100.119.206.78:5685"
+				kuma_global_address: "grpcs://100.119.206.78:5685"
 			}
 		}
 		cilium: {
 			deploy: #DeployCilium & {
-				_cilium_cluster_id:        "101"
-				_cilium_cluster_ipv4_cidr: "10.81.0.0/16"
+				cilium_cluster_id:        "101"
+				cilium_cluster_ipv4_cidr: "10.81.0.0/16"
 			}
 		}
 	}
 	mbpro: {
 		"kuma-zone": {
-			app:    app["kuma-zone"]
+			app:    application["kuma-zone"]
 			deploy: #DeployKumaZone & {
-				_kuma_global_address: "grpcs://100.119.206.78:5685"
+				kuma_global_address: "grpcs://100.119.206.78:5685"
 			}
 		}
 		cilium: {
 			deploy: #DeployCilium & {
-				_cilium_cluster_id:        "103"
-				_cilium_cluster_ipv4_cidr: "10.83.0.0/16"
+				cilium_cluster_id:        "103"
+				cilium_cluster_ipv4_cidr: "10.83.0.0/16"
 			}
 		}
 	}
 
 	// Every cluster runs, deploys a common set of apps
 	[string]: {
-		cilium: app: app["cilium"]
+		cilium: app: application["cilium"]
 		traefik: app: {}
 		traefik: deploy:           #DeployTraefik
-		"argo-workflows": app:     app["argo-workflows"]
+		"argo-workflows": app:     application["argo-workflows"]
 		"argo-workflows": deploy:  #DeployArgoWorkflows
-		"docker-registry": app:    app["docker-registry"]
+		"docker-registry": app:    application["docker-registry"]
 		"docker-registry": deploy: #DeployDockerRegistry
 		pihole: app: {}
 		pihole: deploy: #DeployPihole
 	}
 
-	// Base schemas for projects, apps, deploys
-	[CLUSTER=string]: [string]: project: boot.#ArgoProject & {
-		_cluster: CLUSTER
+	// ArgoCD app
+	[CLUSTER=string]: [APP=string]: {
+		app: boot.#ArgoApplication & {
+			metadata: {
+				bootCluster: CLUSTER
+				bootApp:     APP
+			}
+		}
 	}
-	[CLUSTER=string]: [APP=string]: app: boot.#ArgoApplication & {
-		_cluster: CLUSTER
-		_app:     APP
-	}
-	[CLUSTER=string]: [APP=string]: deploy: boot.#DeployBase & {
-		_domain: "defn.ooo"
-		_cname:  CLUSTER
-		_aname:  APP
+
+	// Kustomize app-bundle
+	[CLUSTER=string]: [APP=string]: {
+		deploy: boot.#DeployBase & {
+			domain: "defn.ooo"
+			cname:  CLUSTER
+			aname:  APP
+		}
 	}
 }
 
 #DeployKumaZone: CFG=boot.#DeployBase & {
-	_kuma_global_address: string
+	kuma_global_address: string
 
-	_upstream: "https://github.com/letfn/katt-kuma/zone?ref=0.0.7"
+	upstream: "https://github.com/letfn/katt-kuma/zone?ref=0.0.7"
 
-	_patches: {
+	patches: {
 		"deployment-kuma-control-plane": {
 			kind: "Deployment"
 			name: "kuma-control-plane"
@@ -114,14 +151,14 @@ cluster: {
 				path: "/spec/template/spec/containers/0/env/8"
 				value: {
 					name:  "KUMA_MULTIZONE_ZONE_GLOBAL_ADDRESS"
-					value: CFG._kuma_global_address
+					value: CFG.kuma_global_address
 				}
 			}, {
 				op:   "replace"
 				path: "/spec/template/spec/containers/0/env/9"
 				value: {
 					name:  "KUMA_MULTIZONE_ZONE_NAME"
-					value: CFG._cname
+					value: CFG.cname
 				}
 			}]
 		}
@@ -129,40 +166,40 @@ cluster: {
 }
 
 #DeployKumaGlobal: boot.#DeployBase & {
-	_upstream: "https://github.com/letfn/katt-kuma/global?ref=0.0.7"
+	upstream: "https://github.com/letfn/katt-kuma/global?ref=0.0.7"
 }
 
 #DeployCilium: CFG=boot.#DeployBase & {
-	_cilium_cluster_id:        string
-	_cilium_cluster_ipv4_cidr: string
+	cilium_cluster_id:        string
+	cilium_cluster_ipv4_cidr: string
 
-	_upstream: "https://github.com/letfn/katt-cilium/base?ref=0.0.7"
+	upstream: "https://github.com/letfn/katt-cilium/base?ref=0.0.7"
 
-	_patches: {
+	patches: {
 		"configmap-cilium-config-cluster-mesh": {
 			kind: "ConfigMap"
 			name: "cilium-config"
 			ops: [{
 				op:    "replace"
 				path:  "/data/cluster-id"
-				value: CFG._cilium_cluster_id
+				value: CFG.cilium_cluster_id
 			}, {
 				op:    "replace"
 				path:  "/data/cluster-name"
-				value: CFG._cname
+				value: CFG.cname
 			}, {
 				op:    "replace"
 				path:  "/data/cluster-pool-ipv4-cidr"
-				value: CFG._cilium_cluster_ipv4_cidr
+				value: CFG.cilium_cluster_ipv4_cidr
 			}]
 		}
 	}
 }
 
 #DeployPihole: CFG=boot.#DeployBase & {
-	_upstream: "https://github.com/letfn/katt-pihole/base?ref=0.0.17"
+	upstream: "https://github.com/letfn/katt-pihole/base?ref=0.0.17"
 
-	_resources: [{
+	resources: [{
 		apiVersion: "traefik.containo.us/v1alpha1"
 		kind:       "IngressRoute"
 		metadata: {
@@ -172,7 +209,7 @@ cluster: {
 		spec: {
 			entryPoints: [ "web"]
 			routes: [{
-				match: "Host(`pihole.\(CFG._cname).\(CFG._domain)`)"
+				match: "Host(`pihole.\(CFG.cname).\(CFG.domain)`)"
 				kind:  "Rule"
 				services: [{
 					name: "pihole-web"
@@ -184,9 +221,9 @@ cluster: {
 }
 
 #DeployTraefik: CFG=boot.#DeployBase & {
-	_upstream: "https://github.com/letfn/katt-traefik/relay?ref=0.0.33"
+	upstream: "https://github.com/letfn/katt-traefik/relay?ref=0.0.33"
 
-	_resources: [{
+	resources: [{
 		apiVersion: "traefik.containo.us/v1alpha1"
 		kind:       "IngressClass"
 		metadata: {
@@ -202,7 +239,7 @@ cluster: {
 		spec: {
 			entryPoints: [ "web"]
 			routes: [{
-				match: "Host(`traefik.\(CFG._cname).\(CFG._domain)`)"
+				match: "Host(`traefik.\(CFG.cname).\(CFG.domain)`)"
 				kind:  "Rule"
 				services: [{
 					name: "api@internal"
@@ -212,27 +249,27 @@ cluster: {
 		}
 	}]
 
-	_patches: {
+	patches: {
 		"cluster-role-binding": {
 			kind: "ClusterRoleBinding"
 			name: "traefik"
 			ops: [{
 				"op":    "replace"
 				"path":  "/subjects/0/namespace"
-				"value": "traefik-\(CFG._cname)"
+				"value": "traefik-\(CFG.cname)"
 			}]
 		}
 	}
 }
 
 #DeployDockerRegistry: boot.#DeployBase & {
-	_upstream: "https://github.com/letfn/katt-docker-registry/base?ref=0.0.2"
+	upstream: "https://github.com/letfn/katt-docker-registry/base?ref=0.0.2"
 }
 
 #DeployArgoWorkflows: CFG=boot.#DeployBase & {
-	_upstream: "https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17"
+	upstream: "https://github.com/letfn/katt-argo-workflows/base?ref=0.0.17"
 
-	_resources: [{
+	resources: [{
 		apiVersion: "traefik.containo.us/v1alpha1"
 		kind:       "Middleware"
 		metadata: {
@@ -242,7 +279,7 @@ cluster: {
 		spec: {
 			forwardAuth: {
 				address: http:
-					authResponseHeaders: ["X-Forwarded-User"] //traefik-forward-auth.traefik.svc.cluster.local:4181
+					authResponseHeaders: ["X-Forwarded-User"]
 			}
 		}
 	}, {
@@ -256,7 +293,7 @@ cluster: {
 			tls: certResolver: "letsencrypt"
 			entryPoints: [ "websecure"]
 			routes: [{
-				match: "Host(`argo.\(CFG._cname).\(CFG._domain)`)"
+				match: "Host(`argo.\(CFG.cname).\(CFG.domain)`)"
 				kind:  "Rule"
 				services: [{
 					name:   "argo-server"

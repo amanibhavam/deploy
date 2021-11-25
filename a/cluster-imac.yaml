@@ -1,125 +1,132 @@
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--kuma-global
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/kuma-global
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: kuma-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--cilium
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/cilium
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: kube-system
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=false
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--argo-workflows
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/argo-workflows
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: argo
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--docker-registry
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/docker-registry
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: docker-registry
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--pihole
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/pihole
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: pihole
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
----
-apiVersion: argoproj.io/v1alpha1
-kind: Application
-metadata:
-  name: imac--traefik
-  namespace: argocd
-spec:
-  project: imac
-  source:
-    repoURL: https://github.com/amanibhavam/deploy
-    path: c/imac/traefik
-    targetRevision: master
-  destination:
-    name: imac
-    namespace: traefik
-  syncPolicy:
-    automated:
-      prune: true
-      selfHeal: true
-    syncOptions:
-    - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: imac
+    bootApp: kuma-global
+    name: imac--kuma-global
+    namespace: argocd
+  spec:
+    project: imac
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/imac/kuma-global
+      targetRevision: master
+    destination:
+      name: imac
+      namespace: kuma-system
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: imac
+    bootApp: cilium
+    name: imac--cilium
+    namespace: argocd
+  spec:
+    project: imac
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/imac/cilium
+      targetRevision: master
+    destination:
+      name: imac
+      namespace: kube-system
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=false
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: imac
+    bootApp: traefik
+    name: imac--traefik
+    namespace: argocd
+  spec:
+    project: imac
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/imac/traefik
+      targetRevision: master
+    destination:
+      name: imac
+      namespace: traefik
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: imac
+    bootApp: argo-workflows
+    name: imac--argo-workflows
+    namespace: argocd
+  spec:
+    project: imac
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/imac/argo-workflows
+      targetRevision: master
+    destination:
+      name: imac
+      namespace: argo
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: imac
+    bootApp: docker-registry
+    name: imac--docker-registry
+    namespace: argocd
+  spec:
+    project: imac
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/imac/docker-registry
+      targetRevision: master
+    destination:
+      name: imac
+      namespace: docker-registry
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
+- apiVersion: argoproj.io/v1alpha1
+  kind: Application
+  metadata:
+    bootCluster: imac
+    bootApp: pihole
+    name: imac--pihole
+    namespace: argocd
+  spec:
+    project: imac
+    source:
+      repoURL: https://github.com/amanibhavam/deploy
+      path: c/imac/pihole
+      targetRevision: master
+    destination:
+      name: imac
+      namespace: pihole
+    syncPolicy:
+      automated:
+        prune: true
+        selfHeal: true
+      syncOptions:
+      - CreateNamespace=true
