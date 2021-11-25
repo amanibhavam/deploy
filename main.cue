@@ -27,12 +27,10 @@ app: {
 		spec: destination: namespace: "traefik"
 	}
 	"docker-registry": {}
-
-	[string]: boot.#ArgoApplication
 }
 
-// Each cluster is an ArgoCD App of Apps
 cluster: {
+	// Unique apps, deploys
 	mini: {
 		"kuma-zone": {
 			app:    app["kuma-zone"]
@@ -96,9 +94,19 @@ cluster: {
 		}
 	}
 
-	// Base schemas for apps, deploys
-	[string]: [string]: app:    boot.#ArgoProject
-	[string]: [string]: deploy: boot.#DeployBase
+	// Base schemas for projects, apps, deploys
+	[CLUSTER=string]: [string]: project: boot.#ArgoProject & {
+		_cluster: CLUSTER
+	}
+	[CLUSTER=string]: [APP=string]: app: boot.#ArgoApplication & {
+		_cluster: CLUSTER
+		_app:     APP
+	}
+	[CLUSTER=string]: [APP=string]: deploy: boot.#DeployBase & {
+		_domain: "defn.ooo"
+		_cname:  CLUSTER
+		_aname:  APP
+	}
 }
 
 #DeployKumaZone: CFG=boot.#DeployBase & {
