@@ -85,15 +85,6 @@ cluster: {
 		pihole: deploy: #DeployPihole
 	}
 
-	// Every deploy is a DeployBase with useful names
-	[CNAME=string]: [ANAME=string]: {
-		deploy: boot.#DeployBase & {
-			_domain: "defn.ooo"
-			_cname:  CNAME
-			_aname:  ANAME
-		}
-	}
-
 	// Base schemas for projects, apps, deploys
 	[CLUSTER=string]: [string]: project: boot.#ArgoProject & {
 		_cluster: CLUSTER
