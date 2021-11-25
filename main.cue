@@ -4,7 +4,8 @@ import (
 	"github.com/defn/boot"
 )
 
-_apps: {
+// ArgoCD Applications
+app: {
 	cilium: {
 		spec: destination: namespace: "kube-system"
 		spec: syncPolicy: syncOptions: ["CreateNamespace=false"]
@@ -26,88 +27,78 @@ _apps: {
 		spec: destination: namespace: "traefik"
 	}
 	"docker-registry": {}
+
+	[string]: boot.#ArgoApplication
 }
 
-_cluster_apps: {
+// Each cluster is an ArgoCD App of Apps
+cluster: {
 	mini: {
-		"kuma-zone": _apps["kuma-zone"]
-	}
-	imac: {
-		"kuma-global": _apps["kuma-global"]
-	}
-	mbpro: {
-		"kuma-zone": _apps["kuma-zone"]
-	}
-}
-
-_cluster_apps: [string]: _common
-
-_common: {
-	cilium:            _apps["cilium"]
-	"argo-workflows":  _apps["argo-workflows"]
-	"docker-registry": _apps["docker-registry"]
-	pihole: {}
-	traefik: {}
-}
-
-project: boot.#ArgoProject
-
-application: boot.#ArgoApplication
-
-for cname, apps in _cluster_apps {
-	project: {
-		"\(cname)": {}
-	}
-
-	for aname, a in apps {
-		application: {
-			"\(cname)": "\(aname)": a
+		"kuma-zone": {
+			app:    app["kuma-zone"]
+			deploy: #DeployKumaZone & {
+				_kuma_global_address: "grpcs://100.119.206.78:5685"
+			}
 		}
-	}
-}
-
-deploy: {
-	// These clusters and their configured apps
-	mbpro: {
-		"kuma-zone": #DeployKumaZone & {
-			_kuma_global_address: "grpcs://100.119.206.78:5685"
-		}
-		cilium: #DeployCilium & {
-			_cilium_cluster_id:        "103"
-			_cilium_cluster_ipv4_cidr: "10.83.0.0/16"
-		}
-	}
-	mini: {
-		"kuma-zone": #DeployKumaZone & {
-			_kuma_global_address: "grpcs://100.119.206.78:5685"
-		}
-		cilium: #DeployCilium & {
-			_cilium_cluster_id:        "101"
-			_cilium_cluster_ipv4_cidr: "10.81.0.0/16"
+		cilium: {
+			deploy: #DeployCilium & {
+				_cilium_cluster_id:        "101"
+				_cilium_cluster_ipv4_cidr: "10.81.0.0/16"
+			}
 		}
 	}
 	imac: {
-		"kuma-global": #DeployKumaGlobal
-		cilium:        #DeployCilium & {
-			_cilium_cluster_id:        "102"
-			_cilium_cluster_ipv4_cidr: "10.82.0.0/16"
+		"kuma-global": {
+			app:    app["kuma-global"]
+			deploy: #DeployKumaGlobal
+		}
+		cilium: {
+			deploy: #DeployCilium & {
+				_cilium_cluster_id:        "102"
+				_cilium_cluster_ipv4_cidr: "10.82.0.0/16"
+			}
+		}
+	}
+	mbpro: {
+		"kuma-zone": {
+			app:    app["kuma-zone"]
+			deploy: #DeployKumaZone & {
+				_kuma_global_address: "grpcs://100.119.206.78:5685"
+			}
+		}
+		cilium: {
+			deploy: #DeployCilium & {
+				_cilium_cluster_id:        "103"
+				_cilium_cluster_ipv4_cidr: "10.83.0.0/16"
+			}
 		}
 	}
 
-	// Every cluster runs these common apps
+	// Every cluster runs, deploys a common set of apps
 	[string]: {
-		traefik:           #DeployTraefik
-		"docker-registry": #DeployDockerRegistry
-		"argo-workflows":  #DeployArgoWorkflows
-		pihole:            #DeployPihole
+		cilium: app: app["cilium"]
+		traefik: app: {}
+		traefik: deploy:           #DeployTraefik
+		"argo-workflows": app:     app["argo-workflows"]
+		"argo-workflows": deploy:  #DeployArgoWorkflows
+		"docker-registry": app:    app["docker-registry"]
+		"docker-registry": deploy: #DeployDockerRegistry
+		pihole: app: {}
+		pihole: deploy: #DeployPihole
 	}
 
-	// Every app is a DeployBase with useful names
-	[CNAME=string]: [ANAME=string]: boot.#DeployBase & {
-		_domain: "defn.ooo"
-		_cname:  CNAME
-		_aname:  ANAME
+	// Every deploy is a DeployBase with useful names
+	[CNAME=string]: [ANAME=string]: {
+		deploy: boot.#DeployBase & {
+			_domain: "defn.ooo"
+			_cname:  CNAME
+			_aname:  ANAME
+		}
 	}
+
+	// Base schemas for apps, deploys
+	[string]: [string]: app:    boot.#ArgoProject
+	[string]: [string]: deploy: boot.#DeployBase
 }
 
 #DeployKumaZone: CFG=boot.#DeployBase & {
